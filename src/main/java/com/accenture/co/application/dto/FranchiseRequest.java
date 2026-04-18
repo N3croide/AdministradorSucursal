@@ -17,6 +17,5 @@ public class FranchiseRequest {
 
     private String name;
 
-    // @Transient
-    // private List<BranchRequest> branches;
+    private List<BranchRequest> branches;
 }
