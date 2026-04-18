@@ -1,7 +1,3 @@
-Este README está diseñado para destacar tanto la arquitectura técnica como el dominio de negocio de tu prueba para **Accenture**. Está estructurado para ser profesional y fácil de leer por un reclutador técnico.
-
----
-
 # Franchise Manager API - Accenture Technical Challenge
 
 Este proyecto es una API REST reactiva desarrollada para la gestión integral de franquicias, sucursales y productos. La solución permite administrar la jerarquía de una franquicia, controlando el inventario de productos por sucursal y consultando estadísticas de stock.
