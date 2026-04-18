@@ -2,12 +2,13 @@ package com.accenture.co.application.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import com.accenture.co.application.dto.BranchProductRequest;
 import com.accenture.co.application.dto.BranchProductResponse;
 import com.accenture.co.domain.model.BranchProduct;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface BranchProductMapper {
 
     BranchProductResponse toResponse(BranchProduct branchProduct);

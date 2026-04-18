@@ -11,6 +11,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +24,7 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @PutMapping("/save")
+    @PostMapping("/save")
     public Mono<ProductResponse> saveProduct(@RequestBody ProductRequest data) {
         return this.productService.saveProduct(data);
     }
@@ -35,6 +36,6 @@ public class ProductController {
 
     @PutMapping("/update/{id}")
     public Mono<ProductResponse> updateProduct(@RequestParam Long id, @RequestBody ProductRequest productRequest){
-        return this.updateProduct(id, productRequest);
+        return this.productService.updateProduct(id, productRequest);
     }
 }

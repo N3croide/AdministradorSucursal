@@ -43,12 +43,12 @@ public class BranchController {
     }
 
     @PutMapping("/addProduct")
-    public Mono<BranchProductResponse> addProduct(@PathVariable BranchProductRequest dto){
+    public Mono<BranchProductResponse> addProduct(@RequestBody BranchProductRequest dto){
         return this.branchProductService.saveBranchProduct(dto);
     }
 
     @PutMapping("/updateStock")
-    public Mono<BranchProductResponse> updateStock(@PathVariable BranchProductRequest dto){
+    public Mono<BranchProductResponse> updateStock(@RequestBody BranchProductRequest dto){
         return this.branchProductService.updateBranchProduct(dto);
     }
 }

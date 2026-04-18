@@ -1,7 +1,5 @@
 package com.accenture.co.domain.model;
 
-import java.util.List;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
