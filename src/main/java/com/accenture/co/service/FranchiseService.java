@@ -33,7 +33,11 @@ public class FranchiseService {
     public Mono<FranchiseResponse> saveFranchise(FranchiseRequest dto) {
         return Mono.just(dto).map(this.franchiseMapper::toEntity)
                 .flatMap(franchise -> this.saveFranchiseWithBranches(franchise))
-                .map(this.franchiseMapper::toResponse);
+                .map(this.franchiseMapper::toResponse).onErrorResume(e -> {
+                    System.err.println("Error al guardar franchise: " + e.getMessage());
+                    return Mono.error(new Exception("Error:"));
+                });
+
     }
 
     public Mono<FranchiseResponse> updateFranchise(Long id, FranchiseRequest dto) {
@@ -42,14 +46,23 @@ public class FranchiseService {
                 .map(franchise -> {
                     this.franchiseMapper.updateEntityFromRequest(dto, franchise);
                     return franchise;
-                }).flatMap(this.franchiseRepository::save).map(this.franchiseMapper::toResponse);
+                }).flatMap(this.franchiseRepository::save).map(this.franchiseMapper::toResponse).onErrorResume(e -> {
+                    System.err.println("Error al actualizar franchise: " + e.getMessage());
+                    return Mono.error(new Exception("Error:"));
+                });
+
     }
 
     public Flux<FranchiseResponse> getAll() {
-        return this.franchiseRepository.findAll().map(this.franchiseMapper::toResponse);
+        return this.franchiseRepository.findAll().map(this.franchiseMapper::toResponse).onErrorResume(e -> {
+            System.err.println("Error al obtener todas las franchise: " + e.getMessage());
+            return Mono.error(new Exception("Error:"));
+        });
+
     }
 
-    // Metodo auxiliar para manejar el registro de una Franchise con la lista de Branches.
+    // Metodo auxiliar para manejar el registro de una Franchise con la lista de
+    // Branches.
     private Mono<Franchise> saveFranchiseWithBranches(Franchise franchise) {
         return franchiseRepository.save(franchise)
                 .flatMap(savedFranchise -> {
@@ -60,7 +73,7 @@ public class FranchiseService {
 
                     List<Branch> branchesToSave = franchise.getBranches().stream()
                             .map(branch -> {
-                                branch.setFranchiseId(savedFranchise.getId()); 
+                                branch.setFranchiseId(savedFranchise.getId());
                                 return branch;
                             })
                             .collect(Collectors.toList());

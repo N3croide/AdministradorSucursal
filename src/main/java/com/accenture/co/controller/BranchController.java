@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+
 @RestController()
 @RequestMapping("/branch")
 @RequiredArgsConstructor
@@ -51,4 +52,10 @@ public class BranchController {
     public Mono<BranchProductResponse> updateStock(@RequestBody BranchProductRequest dto){
         return this.branchProductService.updateBranchProduct(dto);
     }
+
+    @GetMapping("/getAllProducts/{id}")
+        public Mono<BranchProductResponse> getAllProducts(@PathVariable Long id ) {
+            return this.branchService.getAllProducts(id);
+        }
+        
 }
