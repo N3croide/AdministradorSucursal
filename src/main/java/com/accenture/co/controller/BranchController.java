@@ -27,8 +27,7 @@ public class BranchController {
     private final BranchService branchService;
     private final BranchProductService branchProductService;
 
-    // FIX: Corregir el metodo, se debne cambiar de put a post
-    @PutMapping("/save")
+    @PostMapping("/save")
     public Mono<BranchResponse> saveBranch(@RequestBody BranchRequest dto) {
         return this.branchService.saveBranch(dto);
     }
@@ -38,8 +37,7 @@ public class BranchController {
         return this.branchService.getAll();
     }
 
-    // FIX: Corregir metodo, pasa de post -> put
-    @PostMapping("/update/{id}")
+    @PutMapping("/update/{id}")
     public Mono<BranchResponse> updateBranch(@PathVariable Long id, @RequestBody BranchRequest dto) {
         return this.branchService.updateBranch(id, dto);
     }
@@ -49,12 +47,8 @@ public class BranchController {
         return this.branchProductService.saveBranchProduct(dto);
     }
 
-
-    // FIX: Corregir metodo, pasa de post -> put
-    @PostMapping("/updateStock")
+    @PutMapping("/updateStock")
     public Mono<BranchProductResponse> updateStock(@PathVariable BranchProductRequest dto){
         return this.branchProductService.updateBranchProduct(dto);
     }
-
-
 }

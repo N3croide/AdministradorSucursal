@@ -49,26 +49,22 @@ public class FranchiseService {
         return this.franchiseRepository.findAll().map(this.franchiseMapper::toResponse);
     }
 
+    // Metodo auxiliar para manejar el registro de una Franchise con la lista de Branches.
     private Mono<Franchise> saveFranchiseWithBranches(Franchise franchise) {
-        // 1. Guardamos primero la Franquicia (el padre)
         return franchiseRepository.save(franchise)
                 .flatMap(savedFranchise -> {
 
-                    // 2. Si la franquicia traía sucursales en la lista...
                     if (franchise.getBranches() == null || franchise.getBranches().isEmpty()) {
                         return Mono.just(savedFranchise);
                     }
 
-                    // 3. A cada sucursal le asignamos el ID de la franquicia que acabamos de
-                    // guardar
                     List<Branch> branchesToSave = franchise.getBranches().stream()
                             .map(branch -> {
-                                branch.setFranchiseId(savedFranchise.getId()); // FK hacia el padre
+                                branch.setFranchiseId(savedFranchise.getId()); 
                                 return branch;
                             })
                             .collect(Collectors.toList());
 
-                    // 4. Guardamos todas las sucursales y las volvemos a meter en el objeto padre
                     return this.branchRespository.saveAll(branchesToSave)
                             .collectList()
                             .map(savedBranches -> {

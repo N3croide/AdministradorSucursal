@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController()
 @RequestMapping("/product")
@@ -30,5 +31,10 @@ public class ProductController {
     @GetMapping("/getAll")
     public Flux<ProductResponse> getAllProducts() {
         return this.productService.getAll();
+    }
+
+    @PutMapping("/update/{id}")
+    public Mono<ProductResponse> updateProduct(@RequestParam Long id, @RequestBody ProductRequest productRequest){
+        return this.updateProduct(id, productRequest);
     }
 }
