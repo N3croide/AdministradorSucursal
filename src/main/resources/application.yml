@@ -1,17 +1,16 @@
 spring:
   application:
     name: franchise-manager
-
+  webflux:
+    base-path: /api
 
   r2dbc:
     url: ${SPRING_R2DBC_URL}
     username: ${SPRING_R2DBC_USERNAME}
     password: ${SPRING_R2DBC_PASSWORD}
 
-
   sql:
     init:
       mode: always
-
 server:
   port: ${PORT:8080}
