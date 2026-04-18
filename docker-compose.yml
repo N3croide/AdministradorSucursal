@@ -1,59 +1,59 @@
-# services:
-#   db:
-#     image: mysql:8.4
-#     container_name: mysql_db
-#     restart: unless-stopped
-#     environment:
-#       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-#       MYSQL_DATABASE: ${MYSQL_DATABASE}
-#       MYSQL_USER: ${MYSQL_USER}
-#       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-#     ports:
-#       - "3306:3306"
-#     volumes:
-#       - mysql_data:/var/lib/mysql
-#       - ./docker/mysql:/docker-entrypoint-initdb.d
-#
-#     healthcheck:
-#       test:
-#         [
-#           "CMD",
-#           "mysqladmin",
-#           "ping",
-#           "-h",
-#           "localhost",
-#           "-u$$MYSQL_USER",
-#           "-p$$MYSQL_PASSWORD",
-#         ]
-#       interval: 5s
-#       timeout: 5s
-#       retries: 10
-#
-#   app:
-#     build: .
-#     container_name: spring_app
-#     volumes:
-#       - ./target/classes:/app/classes
-#     environment:
-#       SPRING_R2DBC_URL: "r2dbc:mysql://db:3306/${MYSQL_DATABASE}"
-#       SPRING_R2DBC_USERNAME: "${MYSQL_USER}"
-#       SPRING_R2DBC_PASSWORD: "${MYSQL_PASSWORD}"
-#       SPRING_PROFILES_ACTIVE: docker
-#     ports:
-#       - "8080:8080"
-#     develop:
-#       watch:
-#         - action: sync
-#           path: ./src
-#           target: /app/src
-#         - action: rebuild
-#           path: pom.xml
-#     depends_on:
-#       db:
-#         condition: service_healthy
-#
-# server:
-#   port: ${PORT:8080}
-#
-# volumes:
-#   mysql_data:
+services:
+  db:
+    image: mysql:8.4
+    container_name: mysql_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql:/docker-entrypoint-initdb.d
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u$$MYSQL_USER",
+          "-p$$MYSQL_PASSWORD",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    container_name: spring_app
+    volumes:
+      - ./target/classes:/app/classes
+    environment:
+      SPRING_R2DBC_URL: "r2dbc:mysql://db:3306/${MYSQL_DATABASE}"
+      SPRING_R2DBC_USERNAME: "${MYSQL_USER}"
+      SPRING_R2DBC_PASSWORD: "${MYSQL_PASSWORD}"
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8080:8080"
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app/src
+        - action: rebuild
+          path: pom.xml
+    depends_on:
+      db:
+        condition: service_healthy
+
+server:
+  port: ${PORT:8080}
+
+volumes:
+  mysql_data:
