@@ -1,3 +1,5 @@
+ CREATE DATABASE franchisedb; 
+
 CREATE USER IF NOT EXISTS 'adminAccenture'@'%' IDENTIFIED BY 'supersecurepassword';
 ALTER USER 'adminAccenture'@'%' IDENTIFIED WITH caching_sha2_password BY 'supersecurepassword';
 FLUSH PRIVILEGES;

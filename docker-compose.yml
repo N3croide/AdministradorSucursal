@@ -33,7 +33,7 @@ services:
     build: .
     container_name: spring_app
     volumes:
-      - ./target/classes:/app/classes 
+      - ./target/classes:/app/classes
     environment:
       SPRING_R2DBC_URL: "r2dbc:mysql://db:3306/${MYSQL_DATABASE}"
       SPRING_R2DBC_USERNAME: "${MYSQL_USER}"
@@ -51,6 +51,9 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      
+
+server:
+  port: ${PORT:8080}
+
 volumes:
   mysql_data:
