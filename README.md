@@ -28,7 +28,7 @@ La aplicación sigue los principios de la **Arquitectura Limpia (Clean Architect
 
 ## 🛠️ Endpoints Principales
 
-La URL base para el entorno desplegado es: `https://administradorsucursal.onrender.com/api`
+#La URL base para el entorno desplegado es: `https://administradorsucursal.onrender.com/api`
 
 ### 🏢 Franquicias (`/franchise`)
 * `POST /save`: Registra una nueva franquicia.
