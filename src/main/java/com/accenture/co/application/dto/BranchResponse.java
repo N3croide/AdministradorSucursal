@@ -14,4 +14,5 @@ public class BranchResponse {
     private Long id;
     private String name;
     private String address;
+    private Long franchiseId;
 }
