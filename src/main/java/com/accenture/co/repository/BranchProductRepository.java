@@ -17,22 +17,21 @@ public interface BranchProductRepository extends ReactiveCrudRepository<BranchPr
 
     Mono<BranchProduct> findByBranchIdAndProductId(Long branchId, Long productId);
 
-    Mono<Void> deleteByBranchIdAndProductId(Long branchId, Long productId);
+    @Modifying
+    @Query("DELETE FROM branch_products WHERE branch_id = :branchId AND product_id = :productId")
+    Mono<Integer> deleteByBranchIdAndProductId(@Param("branchId") Long branchId, @Param("productId") Long productId);
 
-    @Query("SELECT p.id, p.name, p.price, bp.stock "  +
+    @Query("SELECT p.id, p.name, p.price, bp.stock " +
             "FROM products p " +
             "INNER JOIN branch_products bp ON p.id = bp.product_id " +
             "WHERE bp.branch_id = :branchId")
     Flux<ProductInBranch> findProductsByBranchId(Long branchId);
 
-    @Query("SELECT p.id, p.name, p.price, bp.stock "  +
+    @Query("SELECT p.id, p.name, p.price, bp.stock " +
             "FROM products p " +
             "INNER JOIN branch_products bp ON p.id = bp.product_id " +
             "WHERE bp.branch_id = :branchId and bp.product_id = :productId")
     Flux<ProductInBranch> findProductsByBranchId(Long branchId, Long productId);
-
-
-
 
     @Modifying
     @Query("UPDATE branch_products SET stock = :#{#bp.stock} WHERE branch_id = :#{#bp.branchId} AND product_id = :#{#bp.productId}")

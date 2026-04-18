@@ -12,13 +12,13 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
 
 @RestController()
 @RequestMapping("/branch")
@@ -44,18 +44,23 @@ public class BranchController {
     }
 
     @PutMapping("/addProduct")
-    public Mono<BranchProductResponse> addProduct(@RequestBody BranchProductRequest dto){
+    public Mono<BranchProductResponse> addProduct(@RequestBody BranchProductRequest dto) {
         return this.branchProductService.saveBranchProduct(dto);
     }
 
     @PutMapping("/updateStock")
-    public Mono<BranchProductResponse> updateStock(@RequestBody BranchProductRequest dto){
+    public Mono<BranchProductResponse> updateStock(@RequestBody BranchProductRequest dto) {
         return this.branchProductService.updateBranchProduct(dto);
     }
 
     @GetMapping("/getAllProducts/{id}")
-        public Mono<BranchProductResponse> getAllProducts(@PathVariable Long id ) {
-            return this.branchService.getAllProducts(id);
-        }
-        
+    public Mono<BranchProductResponse> getAllProducts(@PathVariable Long id) {
+        return this.branchService.getAllProducts(id);
+    }
+
+    @DeleteMapping("/deleteProduct/{branchId}/{productId}")
+    public Mono<Boolean> deleteProduct(@PathVariable Long branchId, @PathVariable Long productId){
+        return this.branchProductService.deleteBranchProduct(branchId, productId);
+    }
+
 }

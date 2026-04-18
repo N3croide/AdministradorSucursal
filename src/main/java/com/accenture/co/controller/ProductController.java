@@ -2,6 +2,7 @@ package com.accenture.co.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.accenture.co.application.dto.BranchProductResponse;
 import com.accenture.co.application.dto.ProductRequest;
 import com.accenture.co.application.dto.ProductResponse;
 import com.accenture.co.service.ProductService;
@@ -11,13 +12,13 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-@RestController()
+@RestController
 @RequestMapping("/product")
 @RequiredArgsConstructor
 public class ProductController {
@@ -35,7 +36,12 @@ public class ProductController {
     }
 
     @PutMapping("/update/{id}")
-    public Mono<ProductResponse> updateProduct(@RequestParam Long id, @RequestBody ProductRequest productRequest){
+    public Mono<ProductResponse> updateProduct(@PathVariable Long id, @RequestBody ProductRequest productRequest){
         return this.productService.updateProduct(id, productRequest);
+    }
+
+    @GetMapping("/popular")
+    public Flux<BranchProductResponse> getMostPopular(){
+        return this.productService.getMostPopular();
     }
 }
