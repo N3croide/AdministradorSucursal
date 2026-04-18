@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS branches (
     REFERENCES franchises(id)
 ); 
 
-CREATE TABLE branch_products (
+CREATE TABLE IF NOT EXISTS branch_products (
     branch_id BIGINT NOT NULL,
     product_id BIGINT NOT NULL,
     stock INT NOT NULL DEFAULT 0,
@@ -40,7 +40,7 @@ CREATE TABLE branch_products (
 
     CONSTRAINT fk_bp_branch
         FOREIGN KEY (branch_id)
-        REFERENCES branches(id)
+        REFERENCES branches(id),
 
     CONSTRAINT fk_bp_product
         FOREIGN KEY (product_id)
