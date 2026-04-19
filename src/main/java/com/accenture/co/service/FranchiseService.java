@@ -34,8 +34,10 @@ public class FranchiseService {
         return Mono.just(dto).map(this.franchiseMapper::toEntity)
                 .flatMap(franchise -> this.saveFranchiseWithBranches(franchise))
                 .map(this.franchiseMapper::toResponse).onErrorResume(e -> {
+                    if (e instanceof ResponseStatusException)
+                        return Mono.error(e);
                     System.err.println("Error al guardar franchise: " + e.getMessage());
-                    return Mono.error(new Exception("Error:"));
+                    return Mono.error(new Exception());
                 });
 
     }
@@ -47,6 +49,8 @@ public class FranchiseService {
                     this.franchiseMapper.updateEntityFromRequest(dto, franchise);
                     return franchise;
                 }).flatMap(this.franchiseRepository::save).map(this.franchiseMapper::toResponse).onErrorResume(e -> {
+                    if (e instanceof ResponseStatusException)
+                        return Mono.error(e);
                     System.err.println("Error al actualizar franchise: " + e.getMessage());
                     return Mono.error(new Exception("Error:"));
                 });
@@ -55,6 +59,8 @@ public class FranchiseService {
 
     public Flux<FranchiseResponse> getAll() {
         return this.franchiseRepository.findAll().map(this.franchiseMapper::toResponse).onErrorResume(e -> {
+            if (e instanceof ResponseStatusException)
+                return Mono.error(e);
             System.err.println("Error al obtener todas las franchise: " + e.getMessage());
             return Mono.error(new Exception("Error:"));
         });

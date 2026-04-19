@@ -28,6 +28,8 @@ public class BranchService {
     public Mono<BranchResponse> saveBranch(BranchRequest dto) {
         return Mono.just(dto).map(this.branchMapper::toEntity).flatMap(this.branchRespository::save)
                 .map(this.branchMapper::toResponse).onErrorResume(e -> {
+                    if (e instanceof ResponseStatusException)
+                        return Mono.error(e);
                     System.err.println("Error al guardar branch: " + e.getMessage());
                     return Mono.error(new Exception("Error:"));
                 });
@@ -40,6 +42,8 @@ public class BranchService {
                     this.branchMapper.updateEntityFromRequest(dto, b);
                     return b;
                 }).flatMap(this.branchRespository::save).map(this.branchMapper::toResponse).onErrorResume(e -> {
+                    if (e instanceof ResponseStatusException)
+                        return Mono.error(e);
                     System.err.println("Error al actualizar branch: " + e.getMessage());
                     return Mono.error(new Exception("Error:"));
                 });
@@ -48,6 +52,8 @@ public class BranchService {
 
     public Flux<BranchResponse> getAll() {
         return this.branchRespository.findAll().map(this.branchMapper::toResponse).onErrorResume(e -> {
+            if (e instanceof ResponseStatusException)
+                return Mono.error(e);
             System.err.println("Error al obtener todas las branches: " + e.getMessage());
             return Mono.error(new Exception("Error:"));
         });
@@ -55,9 +61,9 @@ public class BranchService {
 
     public Mono<BranchProductResponse> getAllProducts(Long branchId) {
         return this.branchRespository.findById(branchId)
-                .switchIfEmpty(Mono.error(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sucursal no encontrada")))
-                .flatMap(branch ->
-                this.branchProductRepository.findProductsByBranchId(branch.getId())
+                .switchIfEmpty(
+                        Mono.error(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sucursal no encontrada")))
+                .flatMap(branch -> this.branchProductRepository.findProductsByBranchId(branch.getId())
                         .collectList()
                         .map(productList -> {
                             BranchProductResponse response = new BranchProductResponse();

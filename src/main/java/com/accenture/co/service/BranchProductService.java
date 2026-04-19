@@ -30,6 +30,8 @@ public class BranchProductService {
                     return this.branchProductRespository.findProductsByBranchId(dto.getBranchId()).collectList()
                             .map(products -> this.branchProductMapper.toResponse(saved, products));
                 }).onErrorResume(e -> {
+                    if (e instanceof ResponseStatusException)
+                        return Mono.error(e);
                     System.err.println("Error al asociar producto: " + e.getMessage());
                     return Mono.error(new Exception("Error:"));
                 });
@@ -50,12 +52,17 @@ public class BranchProductService {
                                 .collectList())
                         .map(tuple -> this.branchProductMapper.toResponse(tuple.getT1(), tuple.getT2())))
                 .onErrorResume(e -> {
-                    return Mono.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
+                    if (e instanceof ResponseStatusException)
+                        return Mono.error(e);
+                    System.err.println("Error al actualizar producto de sucursal: " + e.getMessage());
+                    return Mono.error(new Exception("Error:"));
                 });
     }
 
     public Flux<BranchProductResponse> getAll() {
         return branchProductRespository.findAll().map(this.branchProductMapper::toResponse).onErrorResume(e -> {
+            if (e instanceof ResponseStatusException)
+                return Mono.error(e);
             System.err.println("Error al obtener todos los registro de las sucursal - productos : " + e.getMessage());
             return Mono.error(new Exception("Error:"));
         });
@@ -72,6 +79,8 @@ public class BranchProductService {
                     return true;
                 })
                 .onErrorResume(e -> {
+                    if (e instanceof ResponseStatusException)
+                        return Mono.error(e);
                     if (e instanceof ResponseStatusException) {
                         return Mono.error(e);
                     }
